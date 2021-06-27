@@ -6,10 +6,10 @@ jobs:
   deploying:
     runs-on: ubuntu-latest
     steps:
-    - name: checking out
-    - uses: actions/checkout@v2
-    - name: docker login
-    - run: docker login -u ${{ secrets.DOCKERUSERNAME }} -p ${{ secrets.DOCKERAPIKEY }}
-    - name: build and deploy docker image
-      run: |
-        docker buildx ls
+      - name: checking out
+      - uses: actions/checkout@v2
+      - name: docker login
+      - run: docker login -u ${{ secrets.DOCKERUSERNAME }} -p ${{ secrets.DOCKERAPIKEY }}
+      - name: build and deploy docker image
+        run: |
+          docker buildx ls
