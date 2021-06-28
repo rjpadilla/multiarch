@@ -8,8 +8,11 @@ jobs:
     steps:
       - name: checking out
         uses: actions/checkout@v2
-      - name: docker login
-        run: docker login -u ${{ secrets.DOCKERUSERNAME }} -p ${{ secrets.DOCKERAPIKEY }}
-      - name: build and deploy docker image
+      - name: Login to Docker hub
+        uses: docker/login-action
+        with:
+          username: ${{ secrets.DOCKERUSERNAME }}
+          password: ${{ secrets.DOCKERAPIKEY }}
+      - name: Build and deploy docker image
         run: |
           docker buildx ls
