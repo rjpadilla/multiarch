@@ -13,3 +13,5 @@ jobs:
       - name: build and deploy docker image
         run: |
           docker buildx ls
+          docker buildx build --platform linux/arm/v7 -t arm-build .
+          docker run --rm arm-build
