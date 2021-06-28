@@ -16,4 +16,6 @@ jobs:
           docker buildx ls
           docker buildx build --platform linux/arm/v7 -t rjpadilla/arch-test:armv7 .
           docker push rjpadilla/arch-test:armv7
+          docker buildx build -t rjpadilla/arch-test:amd64 .
+          docker push rjpadilla/arch-test:amd64
           # docker run --rm arm-build
