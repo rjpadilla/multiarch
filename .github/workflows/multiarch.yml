@@ -14,5 +14,5 @@ jobs:
         run: |
           docker run --privileged --rm docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
           docker buildx ls
-          #docker buildx build --platform linux/arm/v7 -t arm-build .
-          #docker run --rm arm-build
+          docker buildx build --platform linux/arm/v7 -t arm-build .
+          docker run --rm arm-build
