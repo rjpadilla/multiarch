@@ -28,8 +28,8 @@ jobs:
         run: docker login -u ${{ secrets.DOCKERUSERNAME }} -p ${{ secrets.DOCKERAPIKEY }}
       - name: deploying to docker
         run: |
-          docker manifest create rjpadilla/pm2:latest rjpadilla/pm2:amd64 rjpadilla/pm2:arm64 rjpadilla/pm2:arm
+          docker manifest create rjpadilla/pm2:latest rjpadilla/pm2:amd64 rjpadilla/pm2:arm64 rjpadilla/pm2:armhf
           docker manifest inspect rjpadilla/pm2:latest
-          docker manifest annotate --os linux --arch arm rjpadilla/pm2:latest rjpadilla/pm2:arm 
+          docker manifest annotate --os linux --arch arm rjpadilla/pm2:latest rjpadilla/pm2:armhf
           docker manifest inspect rjpadilla/pm2:latest
           docker manifest push rjpadilla/pm2:latest
