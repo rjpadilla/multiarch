@@ -17,7 +17,7 @@ jobs:
       - name: building pm2 
         run: |
           export DOCKER_CLI_EXPERIMENTAL=enabled
-          docker run --privileged --rm docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
+          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
           docker buildx build --platform ${{ matrix.arch }} -t rjpadilla/pm2:${{ matrix.arch }} .
           docker push rjpadilla/pm2:${{ matrix.arch }}
   pm2-manifest:
