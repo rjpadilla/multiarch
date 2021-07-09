@@ -14,7 +14,8 @@ jobs:
         uses: actions/checkout@v2
       - name: My custom action
         uses: rjpadilla/utils-action@v1.3.1
-        whotogreet: "RJ"
+        with:
+          whotogreet: "RJ"
       - name: login to docker
         run: docker login -u ${{ secrets.DOCKERUSERNAME }} -p ${{ secrets.DOCKERAPIKEY }}
       - name: building pm2 
