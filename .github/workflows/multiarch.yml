@@ -30,6 +30,6 @@ jobs:
         run: |
           docker manifest create rjpadilla/pm2:latest rjpadilla/pm2:amd64 rjpadilla/pm2:arm64 rjpadilla/pm2:arm
           docker manifest inspect rjpadilla/pm2:latest
-          docker manifest annotate rjpadilla/pm2:latest rjpadilla/pm2:arm --arch arm
+          docker manifest annotate --arch arm rjpadilla/pm2:latest rjpadilla/pm2:arm 
           docker manifest inspect rjpadilla/pm2:latest
           docker manifest push rjpadilla/pm2:latest
