@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: [armhf, arm64, amd64]
+        arch: [amd64, arm, arm64]
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
@@ -28,8 +28,10 @@ jobs:
         run: docker login -u ${{ secrets.DOCKERUSERNAME }} -p ${{ secrets.DOCKERAPIKEY }}
       - name: deploying to docker
         run: |
-          docker manifest create rjpadilla/pm2:latest rjpadilla/pm2:amd64 rjpadilla/pm2:arm64 rjpadilla/pm2:armhf
+          docker manifest create rjpadilla/pm2:latest rjpadilla/pm2:amd64 rjpadilla/pm2:arm rjpadilla/pm2:arm64
           docker manifest inspect rjpadilla/pm2:latest
-          docker manifest annotate --os linux --arch arm rjpadilla/pm2:latest rjpadilla/pm2:armhf
+          docker manifest annotate --arch amd64 rjpadilla/pm2:latest rjpadilla/pm2:amd64
+          docker manifest annotate --arch arm rjpadilla/pm2:latest rjpadilla/pm2:arm
+          docker manifest annotate --arch arm64 rjpadilla/pm2:latest rjpadilla/pm2:arm64
           docker manifest inspect rjpadilla/pm2:latest
           docker manifest push rjpadilla/pm2:latest
