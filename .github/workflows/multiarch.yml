@@ -1,25 +1,35 @@
-name: multiarch
+name: multiarch-pm2
 
-on: push
+on: [push]
 
 jobs:
-  deploying:
-    runs-on: ubuntu-latest
+  pm2-build:
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [arm, arm64, amd64]
+    runs-on: ubuntu-20.04
     steps:
-      - name: checking out
+      - name: Checkout
         uses: actions/checkout@v2
-      - name: Login to Docker 
+      - name: login to docker
         run: docker login -u ${{ secrets.DOCKERUSERNAME }} -p ${{ secrets.DOCKERAPIKEY }}
-      - name: build and deploy docker image
+      - name: building pm2 
         run: |
+          export DOCKER_CLI_EXPERIMENTAL=enabled
           docker run --privileged --rm docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
-          docker buildx ls
-          docker buildx build --platform linux/arm/v7 -t rjpadilla/arch-test:armv7 .
-          docker push rjpadilla/arch-test:armv7
-          docker buildx build --platform linux/arm64 -t rjpadilla/arch-test:arm64 .
-          docker push rjpadilla/arch-test:arm64
-          docker buildx build -t rjpadilla/arch-test:amd64 .
-          docker push rjpadilla/arch-test:amd64
-          docker manifest create rjpadilla/arch-test:latest rjpadilla/arch-test:amd64 rjpadilla/arch-test:armv7 rjpadilla/arch-test:arm64
-          docker manifest push rjpadilla/arch-test:latest
-          # docker run --rm arm-build
+          docker buildx build --platform linux/${{ matrix.arch }} -t rjpadilla/pm2:${{ matrix.arch }} .
+          docker push rjpadilla/pm2:${{ matrix.arch }}
+  pm2-manifest:
+    needs: pm2-build
+    runs-on: ubuntu-20.04
+    steps:
+      - name: login to docker
+        run: docker login -u ${{ secrets.DOCKERUSERNAME }} -p ${{ secrets.DOCKERAPIKEY }}
+      - name: deploying to docker
+        run: |
+          docker manifest create rjpadilla/pm2:latest rjpadilla/pm2:amd64 rjpadilla/pm2:arm rjpadilla/pm2:arm64
+          docker manifest inspect rjpadilla/pm2:latest
+          docker manifest annotate rjpadilla/pm2:latest rjpadilla/pm2:arm 
+          docker manifest inspect rjpadilla/pm2:latest
+          docker manifest push rjpadilla/pm2:latest
